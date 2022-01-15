@@ -1,13 +1,13 @@
 import json
 
 day = {
-    0: 'Monday',
-    1: 'Tuesday',
-    2: 'Wednesday',
-    3: 'Thursday',
-    4: 'Friday',
-    5: 'Saturday',
-    6: 'Sunday'
+    0: 'Mon',
+    1: 'Tue',
+    2: 'Wed',
+    3: 'Thu',
+    4: 'Fri',
+    5: 'Sat',
+    6: 'Sun'
 }
 
 config = {
@@ -15,6 +15,13 @@ config = {
 }
 
 list = [
+    {
+        'name': '문주희',
+        'fix': [],
+        'o': [],
+        'x': [0, 5, 6],
+        'cnt': 3
+    },
     {
         'name': '김다윤',
         'fix': [0, 1, 2, 5, 6],
@@ -59,21 +66,21 @@ list = [
     },
     {
         'name': '최재인',
-        'fix': [],
+        'fix': [6],
         'o': [],
         'x': [5],
         'cnt': 4
     },
     {
         'name': '조윤지',
-        'fix': [],
+        'fix': [6],
         'o': [],
-        'x': [5, 6],
+        'x': [5],
         'cnt': 5
     },
     {
         'name': '이선민',
-        'fix': [],
+        'fix': [6],
         'o': [],
         'x': [5],
         'cnt': 4
@@ -108,7 +115,7 @@ list = [
     },
     {
         'name': '조민경',
-        'fix': [],
+        'fix': [5],
         'o': [],
         'x': [2, 6],
         'cnt': 5
@@ -129,24 +136,17 @@ list = [
     },
     {
         'name': '표예진',
-        'fix': [],
+        'fix': [5],
         'o': [],
         'x': [3, 6],
         'cnt': 3
     },
     {
         'name': '김미정',
-        'fix': [],
+        'fix': [5, 6],
         'o': [],
         'x': [],
         'cnt': 5
-    },
-    {
-        'name': '문주희',
-        'fix': [],
-        'o': [],
-        'x': [0, 5, 6],
-        'cnt': 3
     },
 ]
 
@@ -165,9 +165,19 @@ def fix():
     return m
 
 
-def o(m):
+def ox(m):
     for k in list:
-        for i in sorted(m.keys(), reverse=True):
+        for i in k['o']:
+            if k['cnt'] == 0:
+                break
+
+            if len(m[i]) == config['max']:
+                continue
+
+            m[i].append(k['name'])
+            k['cnt'] -= 1
+
+        for i in sorted(m.keys()):
             if k['cnt'] == 0:
                 break
 
@@ -203,14 +213,23 @@ def pretty(obj):
         indent=4)
 
 def print_day(m):
+    print("### schedule")
     for i in sorted(m.keys()):
-        print(m[i])
+        print(day[i] + ": " + str(m[i]))
+
+def print_day_rest(m):
+    print("### rest")
+    for i in sorted(m.keys()):
+        print(day[i] + ": " + str([x for x in all() if x not in m[i]]))
+
+def all():
+    return [x['name'] for x in list]
 
 if __name__ == '__main__':
     m = fix()
 
     while (True):
-        m = o(m)
+        m = ox(m)
 
         print(sum(m))
         print(list)
@@ -220,3 +239,5 @@ if __name__ == '__main__':
         break
 
     print_day(m)
+    print("\n")
+    print_day_remain(m)
