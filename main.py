@@ -61,7 +61,7 @@ list = [
         'name': '최재인',
         'fix': [],
         'o': [],
-        'x': [],
+        'x': [5],
         'cnt': 4
     },
     {
@@ -202,6 +202,9 @@ def pretty(obj):
         sort_keys=True,
         indent=4)
 
+def print_day(m):
+    for i in sorted(m.keys()):
+        print(m[i])
 
 if __name__ == '__main__':
     m = fix()
@@ -216,4 +219,4 @@ if __name__ == '__main__':
         print(config['max'] * len(day.keys()))
         break
 
-    print(m)
+    print_day(m)
